@@ -5,7 +5,7 @@
 read -p "Enter your name: " yourname
 mkdir -p submissions_reminder_$yourname
 
-parent_dir="submissions_reminder_'$yourname'"
+parent_dir="submissions_reminder_$yourname"
 #create subdirectories
 mkdir -p "$parent_dir/app"
 mkdir -p "$parent_dir/modules"
