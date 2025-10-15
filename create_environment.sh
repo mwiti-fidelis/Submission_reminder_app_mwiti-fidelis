@@ -1,4 +1,5 @@
 #!/usr/bin/bash
+
 #Creates and app reminder for students to ren=mind them on pending submissions
 
 #ask for user input and create a directory submissions_reminder_{userinput}
@@ -95,8 +96,3 @@ chmod +x "$parent_dir/modules/functions.sh"
 echo "Enter ./sumbission_reminder_app/tartup.sh to start the app"
 echo "successfully created the app environment"
 echo "===========success========"
-
-
-
-
-
