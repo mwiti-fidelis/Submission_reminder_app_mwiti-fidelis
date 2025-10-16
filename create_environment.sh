@@ -4,24 +4,28 @@
 
 #ask for user input and create a directory submissions_reminder_{userinput}
 read -p "Enter your name: " yourname
-mkdir -p submissions_reminder_$yourname
+mkdir -p submission_reminder_$yourname
 
-parent_dir="submissions_reminder_$yourname"
+app_dir="submission_reminder_$yourname"
+
 #create subdirectories
-mkdir -p "$parent_dir/app"
-mkdir -p "$parent_dir/modules"
-mkdir -p "$parent_dir/assets"
-mkdir -p "$parent_dir/config"
+mkdir -p "$app_dir/app"
+mkdir -p "$app_dir/modules"
+mkdir -p "$app_dir/assets"
+mkdir -p "$app_dir/config"
 
 #create the files in their respective subdirectories with their contents
 #create config.env and paste the content
-echo "# This is the config file
+
+cat > "$app_dir/config/config.env" <<'EOL'
+# This is the config file
 ASSIGNMENT="Shell Navigation"
 DAYS_REMAINING=2
-" > "$parent_dir/config/config.env"
+EOL
 
 #create reminder.sh file and paste its content
-echo "#!/bin/bash
+cat > "$app_dir/app/reminder.sh" <<'EOL'
+#!/bin/bash
 
 # Source environment variables and helper functions
 source ./config/config.env
@@ -36,10 +40,11 @@ echo "Days remaining to submit: $DAYS_REMAINING days"
 echo "--------------------------------------------"
 
 check_submissions $submissions_file
-" > "$parent_dir/app/reminder.sh"
+EOL
 
 #create and paste the contents of functions.sh
-echo "#!/bin/bash
+cat > "$app_dir/modules/functions.sh" <<'EOL'
+#!/usr/bin/bash
 
 # Function to read submissions file and output students who have not submitted
 function check_submissions {
@@ -59,10 +64,10 @@ function check_submissions {
         fi
     done < <(tail -n +2 "$submissions_file") # Skip the header
 }
-" > "$parent_dir/modules/functions.sh"
+EOL
 
 #create and paste the contents of submissions.txt
-echo "
+cat > "$app_dir/assets/submissions.txt" <<'EOL'
 student, assignment, submission status
 Chinemerem, Shell Navigation, not submitted
 Chiagoziem, Git, submitted
@@ -73,26 +78,26 @@ Papa, Shell Basics, not submitted
 Emna, Shell Nvigation, submitted
 Alicia, Shell Basics, submitted
 Sandrine, Git, not submitted 
-" > "$parent_dir/assets/submissions.txt"
+EOL
 
-echo "
+#create startup script
+cat > "$app_dir/startup.sh" <<'EOL'
 #!/usr/bin/bash
 #Create a script that runs the reminder app
-if [  ! -f "$parent_dir/config/config.env"  ]; then
-    echo "Error. The config.env does not exist and cannot start the reminder app"
+if [  ! -f "config/config.env" ]; then
+    echo "Error! The config.env does not exist and cannot start the reminder app"
     exit 1
 fi
 
-./"$parent_dir/app/reminder.sh"
-
-" > "$parent_dir/startup.sh"
+./app/reminder.sh
+EOL
 
 #give execution permissions to all .sh files
 
-chmod +x "$parent_dir/app/reminder.sh"
-chmod +x "$parent_dir/startup.sh"
-chmod +x "$parent_dir/modules/functions.sh"
+chmod +x "$app_dir/app/reminder.sh"
+chmod +x "$app_dir/startup.sh"
+chmod +x "$app_dir/modules/functions.sh"
 
-echo "Enter ./sumbission_reminder_app/tartup.sh to start the app"
+echo "Enter cd $app_dir && ./startup.sh to run the app"
 echo "successfully created the app environment"
 echo "===========success========"
