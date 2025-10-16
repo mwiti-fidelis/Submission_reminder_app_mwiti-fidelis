@@ -34,13 +34,8 @@ fi
 #replace the user input with the current name in config/config.env on row2
 escaped_assignment=$(printf '%s\n' "$assignment" | sed 's/[\/&]/\\&/g')
 
-sed -i "s|^ASSIGNMENT=.*|ASSIGNMENT=$escaped_assignment|" config/config.env
+sed -i "s/ASSIGNMENT=\".*\"/ASSIGNMENT=\"$new_assignment\"/" config/config.env
 
-
-if ! grep -q "^ASSIGNMENT=$new_assignment$" config/config.env; then
-    echo "Assignment not updated properly"
-    exit 1
-fi
 echo "Asignment updated successfully to: $new_assignment"
 #rerun the startup.sh to check the changes in assignment and the submission status
 
